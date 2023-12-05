@@ -4,6 +4,7 @@ int main () {
     FILE *file = fopen("cal_doc.txt", "r");
 
     char str[1000];
+    int totalSum = 0;
 
     while (fscanf(file, "%999s", str) == 1)
     {
@@ -24,9 +25,14 @@ int main () {
             
         }
 
-        printf("First digit in str: %c\n", first_digit);
-        printf("Last digit in str: %c\n", last_digit);
+        int first_digit_number = first_digit - '0';
+        int last_digit_number = last_digit - '0';
+
+        int two_digit_number = first_digit_number * 10 + last_digit_number;
+
+        totalSum += two_digit_number;
     }
+    printf("The total sum of two-digit number: %d\n", totalSum);
     
 fclose(file);
 return 0;
