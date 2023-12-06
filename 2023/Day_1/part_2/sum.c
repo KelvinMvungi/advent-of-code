@@ -52,9 +52,23 @@ int main()
                 break;
             }
         }
+        int first_digit_number, last_digit_number;
 
-        int first_digit_number = first_digit - '0';
-        int last_digit_number = last_digit - '0';
+        if (first_digit >= '0' && first_digit <= '9'){
+            first_digit_number = first_digit - '0';
+        } else {
+            char word[10];
+            snprintf(word, sizeof(word), "%c", first_digit);
+            first_digit_number = wordToNumber(word);
+        }
+
+        if(last_digit >= '0' && last_digit <= '9'){
+            last_digit_number = last_digit - '0';
+        } else {
+            char word[10];
+            snprintf(word, sizeof(word), "%c", last_digit);
+            last_digit_number = wordToNumber(word);
+        }
 
         int two_digit_number = first_digit_number * 10 + last_digit_number;
 
