@@ -37,18 +37,19 @@ int main()
 
         for (int i = 0; str[i] != '\0'; i++)
         {
-            if (str[i] >= '0' && str[i] <= '9')
+            if ((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'a' && str[i] <= 'z'))
             {
                 first_digit = str[i];
                 break;
             }
         }
 
-        for (int i = 0; str[i] != '\0'; i++)
+        for (int i = strlen(str) -1; i >= 0; i--)
         {
-            if (str[i] >= '0' && str[i] <= '9')
+            if ((str[i] >= '0' && str[i] <= '9') && (str[i] >= 'a' && str[i] <= 'z'))
             {
                 last_digit = str[i];
+                break;
             }
         }
 
