@@ -24,7 +24,9 @@ int main () {
             }
             
         }
-
+    int is_named_int(int) {
+        
+    } 
         int first_digit_number = first_digit - '0';
         int last_digit_number = last_digit - '0';
 
