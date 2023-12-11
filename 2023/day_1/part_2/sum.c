@@ -7,3 +7,10 @@ char *file = "cal_doc.txt";
 bool is_digit(char ch) {
     return ch >= '0' && ch <= '9';
 }
+
+int parse_digit(char ch) {
+        return ch - '0';
+}
+
+
+
