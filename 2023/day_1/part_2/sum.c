@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-char *file = "cal_doc.txt";
+char* file = "cal_doc.txt";
 
 bool is_digit(char ch) {
     return ch >= '0' && ch <= '9';
@@ -118,8 +118,15 @@ Position find_first_named_int (char* str) {
             Position first_digit = min_position(find_first_digit(line), find_first_named_int(line));
             Position last_digit = max_position(find_last_digit(line), find_last_named_int(line));
 
-            printf("line: %s first_digit: %d, last_digit: %d/n", line, first_digit.value, last_digit.value);
+            printf("line: %s first_digit: %d, last_digit: %d\n", line, first_digit.value, last_digit.value);
             sum += (first_digit.value * 10) + last_digit.value;
         }
         return sum;
+    }
+
+    int main () {
+        FILE* ic = fopen(file, "r");
+    printf("%d\n", solve_day_day_part_part_1(ic, 0));
+    fclose(ic);
+    return 0;
     }
