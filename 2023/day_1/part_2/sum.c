@@ -78,7 +78,7 @@ Position find_first_named_int (char* str) {
         while(i >= 0) {
             int len = (strlen(str) - i) < 5 ? (strlen(str) - i) : 5;
         if (is_named_int(strnup(str + i, len)) > 0) {
-            return (Position){i, in_named_int(strnup(str + i, len))};
+            return (Position){i, is_named_int(strnup(str + i, len))};
         } else {
             i--;
         }
@@ -112,4 +112,14 @@ Position find_first_named_int (char* str) {
 
     }
     
-    
+    int solve_day_day_part_part_1 (FILE* channel, int sum) {
+        char line[1000];
+        while(fgets(line, sizeof(line), channel) != NULL) {
+            Position first_digit = min_position(find_first_digit(line), find_first_named_int(line));
+            Position last_digit = max_position(find_last_digit(line), find_last_named_int(line));
+
+            printf("line: %s first_digit: %d, last_digit: %d/n", line, first_digit.value, last_digit.value);
+            sum += (first_digit.value * 10) + last_digit.value;
+        }
+        return sum;
+    }
