@@ -45,7 +45,7 @@ Position max_position(Position a, Position b) {
     }
 }
 
-int is_named_int (char* str) {
+int is_named_int(char* str) {
     if (strncmp(str, "one", 3) == 0) return 1;
     if (strncmp(str, "two", 3) == 0) return 2;
     if (strncmp(str, "three", 5) == 0) return 3;
@@ -60,7 +60,7 @@ int is_named_int (char* str) {
 
 Position find_first_named_int (char* str) {
     int i = 0;
-    while (i < strlne(str))
+    while (i < strlen(str))
     {
         int end_of_string = (strlen(str) - i) < 5 ? (strlen(str) - i) : 5;
         if(is_named_int(strndup(str + i, end_of_string)) > 0) {
@@ -77,8 +77,8 @@ Position find_first_named_int (char* str) {
         int i = strlen(str) - 1;
         while(i >= 0) {
             int len = (strlen(str) - i) < 5 ? (strlen(str) - i) : 5;
-        if (is_named_int(strnup(str + i, len)) > 0) {
-            return (Position){i, is_named_int(strnup(str + i, len))};
+        if (is_named_int(strndup(str + i, len)) > 0) {
+            return (Position){i, is_named_int(strndup(str + i, len))};
         } else {
             i--;
         }
