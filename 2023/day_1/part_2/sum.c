@@ -57,3 +57,59 @@ int is_named_int (char* str) {
     if (strncmp(str, "nine", 4) == 0) return 9;
     return -1;
 }
+
+Position find_first_named_int (char* str) {
+    int i = 0;
+    while (i < strlne(str))
+    {
+        int end_of_string = (strlen(str) - i) < 5 ? (strlen(str) - i) : 5;
+        if(is_named_int(strndup(str + i, end_of_string)) > 0) {
+            return (Position) {i, is_named_int(strndup(str + i, end_of_string))};
+        } else {
+            i++;
+        }
+    }
+    return (Position) {-1, 0};
+}
+
+
+    Position find_last_named_int (char* str) {
+        int i = strlen(str) - 1;
+        while(i >= 0) {
+            int len = (strlen(str) - i) < 5 ? (strlen(str) - i) : 5;
+        if (is_named_int(strnup(str + i, len)) > 0) {
+            return (Position){i, in_named_int(strnup(str + i, len))};
+        } else {
+            i--;
+        }
+        }
+        return (Position) {-1, 0};
+    }
+
+    Position find_first_digit (char* str) {
+        int i = 0;
+        while (i < strlen(str)) {
+            if (is_digit(str[i])){
+                return (Position){i, parse_digit(str[i])};
+            } else {
+                i++;
+            }
+        }
+        return (Position){-1, 0};
+    }
+
+
+    Position find_last_digit(char* str) {
+        int i = strlen(str) - 1;
+        while (i >= 0) {
+            if (is_digit(str[i])) {
+                return (Position){i, parse_digit(str[i])};
+            } else {
+                i--;
+            }
+        }
+            return (Position){-1, 0};
+
+    }
+    
+    
