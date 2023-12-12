@@ -2,120 +2,84 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_LINE_LENGTH 1000
-
-typedef struct {
-    int red;
-    int green;
-    int blue;
-} TargetCounts;
-
-void processLine(char *line, TargetCounts targetCounts, int **validGames, int *validGamesCount);
-
 int main() {
-    FILE *file = fopen("aoc-d2p1.txt", "r");
-    if (file == NULL) {
-        perror("Error opening file");
-        return 1;
+  // Define the target counts for each color
+  int target_counts[3] = {12, 13, 14}; // red, green, blue
+
+  // Open the file in read mode
+  FILE *file = fopen("aoc-d2p1.txt", "r");
+  if (file == NULL) {
+    printf("Error opening file");
+    return 1;
+  }
+
+  // Read the content of the file line by line
+  char line[1024];
+  int valid_games = 0;
+  while (fgets(line, sizeof(line), file)) {
+    // Skip empty lines
+    if (strlen(line) == 1) {
+      continue;
     }
 
-    TargetCounts targetCounts = {12, 13, 14};
-    int *validGames = NULL;
-    int validGamesCount = 0;
+    // Extract the game ID and the game string
+    char *game_id_str = strtok(line, ":");
+    char *game_str = strtok(NULL, "\n");
+    int game_id = atoi(strtok(game_id_str, " "));
 
-    char buffer[MAX_LINE_LENGTH];
-    while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        if (buffer[0] == '\n') {
-            continue;
+    // Check if all game lines are valid
+    int valid_lines = 1;
+    char *game_line = strtok(game_str, ";");
+    while (game_line) {
+      int valid_cubes = 1;
+      char *cube = strtok(game_line, ",");
+      while (cube) {
+        // Extract the color and count of the cube
+        char *color_str = strtok(cube, " ");
+        int count = atoi(strtok(NULL, " "));
+
+        // Convert the color string to an integer index
+        int color;
+        if (strcmp(color_str, "red") == 0) {
+          color = 0;
+        } else if (strcmp(color_str, "green") == 0) {
+          color = 1;
+        } else if (strcmp(color_str, "blue") == 0) {
+          color = 2;
+        } else {
+          // Handle invalid color
+          valid_cubes = 0;
+          break;
         }
 
-        // Remove the newline character if present
-        size_t len = strlen(buffer);
-        if (len > 0 && buffer[len - 1] == '\n') {
-            buffer[len - 1] = '\0';
+        // Check if the count is valid for the color
+        if (count > target_counts[color]) {
+          valid_cubes = 0;
+          break;
         }
 
-        processLine(buffer, targetCounts, &validGames, &validGamesCount);
+        cube = strtok(NULL, ",");
+      }
+
+      if (!valid_cubes) {
+        valid_lines = 0;
+        break;
+      }
+
+      game_line = strtok(NULL, ";");
     }
 
-    fclose(file);
-
-    printf("Valid Games Count: %d\n", validGamesCount);
-    for (int i = 0; i < validGamesCount; i++) {
-        printf("Valid Game ID: %d\n", validGames[i]);
+    // Add the game ID to the list of valid games if all lines are valid
+    if (valid_lines) {
+      valid_games += game_id;
     }
+  }
 
-    free(validGames); // Don't forget to free the allocated memory
+  // Close the file
+  fclose(file);
 
-    return 0;
-}
+  // Print the sum of the valid game IDs
+  printf("%d\n", valid_games);
 
-void processLine(char *line, TargetCounts targetCounts, int **validGames, int *validGamesCount) {
-    char *token;
-    int gameId;
-
-    // Extract game ID
-    token = strtok(line, ":");
-    if (token == NULL) {
-        fprintf(stderr, "Error: Invalid line format (missing game ID)\n");
-        return;
-    }
-    token = strtok(NULL, " ");
-    if (token == NULL) {
-        fprintf(stderr, "Error: Invalid line format (missing game ID)\n");
-        return;
-    }
-    gameId = atoi(token);
-
-    printf("Processing Game ID: %d\n", gameId);
-
-    // Extract and process game sets
-    token = strtok(NULL, ";");
-    while (token != NULL) {
-        int isValidSet = 1;
-
-        // Extract and process each cube in the set
-        char *cube = strtok(token, ",");
-        while (cube != NULL) {
-            char *color = strtok(cube, " ");
-            char *count_str = strtok(NULL, " ");
-
-            // Check if strtok returned a non-NULL value
-            if (count_str != NULL) {
-                int count = atoi(count_str);
-
-                // Now you have the color and count, you can continue with the logic
-                // For example, you might check if count is within targetCounts, etc.
-
-                if (count > targetCounts.red || count > targetCounts.green || count > targetCounts.blue) {
-                    fprintf(stderr, "Error: Invalid count in cube\n");
-                    return;
-                }
-
-                // Continue processing the cube, e.g., update total counts, etc.
-            } else {
-                // Handle the error, e.g., print an error message
-                fprintf(stderr, "Error: Invalid line format (missing count)\n");
-                return;
-            }
-
-            cube = strtok(NULL, ",");
-        }
-
-        // Check if the entire set is valid
-        if (isValidSet) {
-            printf("Adding Valid Game ID: %d\n", gameId);
-            (*validGamesCount)++;
-            *validGames = realloc(*validGames, (*validGamesCount) * sizeof(int));
-            if (*validGames == NULL) {
-                perror("Memory allocation error");
-                exit(EXIT_FAILURE);
-            }
-
-            (*validGames)[(*validGamesCount) - 1] = gameId;
-            break; // Break after the first valid set for simplicity
-        }
-
-        token = strtok(NULL, ";");
-    }
+  return 0;
 }
